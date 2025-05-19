@@ -1,3 +1,5 @@
+from math import sqrt
+
 import pygame
 
 from src.main.core.const import SCREEN_WIDTH, SCREEN_HEIGHT
@@ -12,6 +14,7 @@ class Rocket(pygame.sprite.Sprite):
         self.direction = "up"
 
     def update(self, keys):
+        diagonal_speed = self.speed // 4
         if keys[pygame.K_LEFT] or keys[pygame.K_a]:
             self.direction = "left"
             self.rect.x -= self.speed
@@ -27,42 +30,36 @@ class Rocket(pygame.sprite.Sprite):
         if ((keys[pygame.K_UP] or keys[pygame.K_w])
                 and (keys[pygame.K_LEFT] or keys[pygame.K_a])):
             self.direction = "up-left"
-            self.rect.y -= self.speed/8
-            self.rect.x -= self.speed/8
+            self.rect.y -= diagonal_speed
+            self.rect.x -= diagonal_speed
         if ((keys[pygame.K_DOWN] or keys[pygame.K_s])
                 and (keys[pygame.K_RIGHT] or keys[pygame.K_d])):
             self.direction = "down-right"
-            self.rect.y += self.speed/8
-            self.rect.x += self.speed/8
+            self.rect.y += diagonal_speed
+            self.rect.x += diagonal_speed
         if ((keys[pygame.K_DOWN] or keys[pygame.K_s])
                 and (keys[pygame.K_LEFT] or keys[pygame.K_a])):
             self.direction = "down-left"
-            self.rect.y += self.speed/8
-            self.rect.x -= self.speed/8
+            self.rect.y += diagonal_speed
+            self.rect.x -= diagonal_speed
         if ((keys[pygame.K_UP] or keys[pygame.K_w])
                 and (keys[pygame.K_RIGHT] or keys[pygame.K_d])):
             self.direction = "up-right"
-            self.rect.x += self.speed/8
-            self.rect.y -= self.speed/8
+            self.rect.x += diagonal_speed
+            self.rect.y -= diagonal_speed
 
-
-        if self.direction == "up":
-            self.image = pygame.transform.rotate(self.original_img, 0)
-        if self.direction == "up-left":
-            self.image = pygame.transform.rotate(self.original_img, 45)
-        if self.direction == "up-right":
-            self.image = pygame.transform.rotate(self.original_img, -45)
-        if self.direction == "down-left":
-            self.image = pygame.transform.rotate(self.original_img, 135)
-        if self.direction == "down-right":
-            self.image = pygame.transform.rotate(self.original_img, -135)
-        if self.direction == "down":
-            self.image = pygame.transform.rotate(self.original_img, 180)
-        if self.direction == "right":
-            self.image = pygame.transform.rotate(self.original_img, -90)
-        if self.direction == "left":
-            self.image = pygame.transform.rotate(self.original_img, 90)
-
+        angle_map ={
+            "up":0,
+            "up-left":45,
+            "up-right":-45,
+            "down-left":135,
+            "down-right":-135,
+            "down":180,
+            "right":-90,
+            "left":90
+        }
+        self.image = pygame.transform.rotate(self.original_img, angle_map[self.direction])
 
         self.rect = self.image.get_rect(center=self.rect.center)
+        # предели єкрана
         self.rect.clamp_ip(pygame.Rect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT))
