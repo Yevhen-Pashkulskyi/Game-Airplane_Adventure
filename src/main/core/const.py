@@ -1,0 +1,17 @@
+# екран
+SCREEN_WIDTH = 1100
+SCREEN_HEIGHT = 691
+FPS = 60
+
+#
+PLANE_WIDTH = 64
+ROCKET_HEIGHT = 64
+ASTEROID_SIZE = 50
+BONUS_SIZE = 30
+
+# Задаємо кольори
+WHITE = (255, 255, 255)
+BLACK = (0, 0, 0)
+RED = (255, 0, 0)
+GREEN = (0, 255, 0)
+BLUE = (0, 0, 255)
