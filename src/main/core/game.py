@@ -1,6 +1,5 @@
 import os
 import random
-
 import pygame
 
 from objects.asteroid import Asteroid
@@ -9,14 +8,20 @@ from objects.explosion import Explosion
 from objects.rocket import Rocket
 from src.main.core.const import *
 
-# первірка шляху до зображень
+# первірка шляху до файлів
 try:
     game_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
-    img_dir = os.path.join(game_dir, "assets", "img")
-    rocket_img = pygame.image.load(os.path.join(img_dir, "rocket_40x64.png"))
-    asteroid_img = pygame.image.load(os.path.join(img_dir, "asteroid_48x50.png"))
-    bonus_img = pygame.image.load(os.path.join(img_dir, "bonus_49x50.png"))
-    background_img = pygame.image.load(os.path.join(img_dir, "background_1100x691.png"))
+    IMG_DIR = os.path.join(game_dir, "assets", "img")
+    rocket_img = pygame.image.load(os.path.join(IMG_DIR, "rocket_40x64.png"))
+    asteroid_img = pygame.image.load(os.path.join(IMG_DIR, "asteroid_48x50.png"))
+    bonus_img = pygame.image.load(os.path.join(IMG_DIR, "bonus_49x50.png"))
+    background_img = pygame.image.load(os.path.join(IMG_DIR, "background_1100x691.png"))
+
+
+    # snd_dir = os.path.join(game_dir, "assets", "snd")
+    # coin_sound = pygame.mixer.Sound(os.path.join(snd_dir, "coin-257878.wav"))
+    # boom_sound = pygame.mixer.Sound(os.path.join(snd_dir, "cinematic-boom-171285.wav"))
+
 except pygame.error as e:
     print(e)
     pygame.quit()
@@ -29,7 +34,7 @@ class Game:
         # назва вікна
         pygame.display.set_caption("Airplane Adventure")
         pygame.display.set_icon(
-            pygame.image.load(os.path.join(img_dir, "icon_10x16.png"))
+            pygame.image.load(os.path.join(IMG_DIR, "icon_10x16.png"))
         )
         # змінна для вірної швидкості гри
         self.clock = pygame.time.Clock()
@@ -84,7 +89,7 @@ class Game:
             self.rocket.rect.center = (100, SCREEN_HEIGHT // 2)
 
             for asteroid in collided:
-                self.explosions.add(Explosion(asteroid.rect.center, img_dir))
+                self.explosions.add(Explosion(asteroid.rect.center, IMG_DIR))
                 # скидання позиції астероїда
                 asteroid.rect.x = SCREEN_WIDTH
                 asteroid.rect.y = random.randrange(0, SCREEN_HEIGHT - ASTEROID_SIZE)
