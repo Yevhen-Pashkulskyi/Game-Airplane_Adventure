@@ -12,15 +12,7 @@ from src.main.core.const import *
 try:
     game_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
     IMG_DIR = os.path.join(game_dir, "assets", "img")
-    rocket_img = pygame.image.load(os.path.join(IMG_DIR, "rocket_40x64.png"))
-    asteroid_img = pygame.image.load(os.path.join(IMG_DIR, "asteroid_48x50.png"))
-    bonus_img = pygame.image.load(os.path.join(IMG_DIR, "bonus_49x50.png"))
-    background_img = pygame.image.load(os.path.join(IMG_DIR, "background_1100x691.png"))
-
-
-    # snd_dir = os.path.join(game_dir, "assets", "snd")
-    # coin_sound = pygame.mixer.Sound(os.path.join(snd_dir, "coin-257878.wav"))
-    # boom_sound = pygame.mixer.Sound(os.path.join(snd_dir, "cinematic-boom-171285.wav"))
+    snd_dir = os.path.join(game_dir, "assets", "snd")
 
 except pygame.error as e:
     print(e)
@@ -40,15 +32,30 @@ class Game:
         self.clock = pygame.time.Clock()
         # змінна для циклу гри
         self.running = True
-
+        try:
         # Завантаження зображень
-        self.background = background_img
-        self.player_img = rocket_img
-        self.asteroid_img = asteroid_img
-        self.bonus_img = bonus_img
+            self.rocket_img = pygame.image.load(os.path.join(IMG_DIR, "rocket_40x64.png"))
+            self.asteroid_img = pygame.image.load(os.path.join(IMG_DIR, "asteroid_48x50.png"))
+            self.bonus_img = pygame.image.load(os.path.join(IMG_DIR, "bonus_49x50.png"))
+            self.background_img = pygame.image.load(os.path.join(IMG_DIR, "background_1100x691.png"))
+
+            # завантаження звуків
+            self.coin_sound = pygame.mixer.Sound(os.path.join(snd_dir, "coin-257878.wav"))
+            self.boom_sound = pygame.mixer.Sound(os.path.join(snd_dir, "cinematic-boom-171285.wav"))
+        except pygame.error as e:
+            print(e)
+            pygame.quit()
+            exit()
+
+        self.boom_sound.set_volume(0.2)
+        self.coin_sound.set_volume(0.2)
+        # pygame.mixer.music.load(os.path.join(snd_dir, "background-music-109766.mp3"))
+        # pygame.mixer.music.set_volume(0.2)
+        # pygame.mixer.music.play(loops=-1, start=0.0)
+        # pygame.mixer.music.set_volume(0.2)
 
         # Створення спрайтів
-        self.rocket = Rocket(self.player_img, (100, SCREEN_HEIGHT // 2))
+        self.rocket = Rocket(self.rocket_img, (100, SCREEN_HEIGHT // 2))
         self.rocket_group = pygame.sprite.GroupSingle(self.rocket)
 
         self.asteroids = pygame.sprite.Group()
@@ -89,6 +96,7 @@ class Game:
             self.rocket.rect.center = (100, SCREEN_HEIGHT // 2)
 
             for asteroid in collided:
+                self.boom_sound.play()
                 self.explosions.add(Explosion(asteroid.rect.center, IMG_DIR))
                 # скидання позиції астероїда
                 asteroid.rect.x = SCREEN_WIDTH
@@ -100,6 +108,7 @@ class Game:
         hits = pygame.sprite.spritecollide(self.rocket, self.bonuses, dokill=True)
         for _ in hits:
             self.score += 1
+            self.coin_sound.play()
             self.bonuses.add(Bonus(self.bonus_img, speed=5 + self.score // 10))
 
         # Підвищення рівня та нові астероїди
@@ -110,7 +119,7 @@ class Game:
             self.last_score = self.score
 
     def draw(self):
-        self.screen.blit(self.background, (0, 0))
+        self.screen.blit(self.background_img, (0, 0))
         self.rocket_group.draw(self.screen)
         self.asteroids.draw(self.screen)
         self.bonuses.draw(self.screen)
