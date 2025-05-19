@@ -15,23 +15,23 @@ class Rocket(pygame.sprite.Sprite):
         if keys[pygame.K_LEFT]:
             self.direction = "left"
             self.rect.x -= self.speed
-        elif keys[pygame.K_RIGHT]:
+        if keys[pygame.K_RIGHT]:
             self.direction = "right"
             self.rect.x += self.speed
-        elif keys[pygame.K_UP]:
+        if keys[pygame.K_UP]:
             self.direction = "up"
             self.rect.y -= self.speed
-        elif keys[pygame.K_DOWN]:
+        if keys[pygame.K_DOWN]:
             self.direction = "down"
             self.rect.y += self.speed
 
         if self.direction == "up":
             self.image = pygame.transform.rotate(self.original_img, 0)
-        elif self.direction == "right":
+        if self.direction == "right":
             self.image = pygame.transform.rotate(self.original_img, -90)
-        elif self.direction == "down":
+        if self.direction == "down":
             self.image = pygame.transform.rotate(self.original_img, 180)
-        elif self.direction == "left":
+        if self.direction == "left":
             self.image = pygame.transform.rotate(self.original_img, 90)
 
 
