@@ -23,6 +23,9 @@ class Game:
     def __init__(self):
         # розміри для створення вікна
         self.screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+
+        self.paused = False
+
         # назва вікна
         pygame.display.set_caption("Airplane Adventure")
         pygame.display.set_icon(
@@ -80,13 +83,23 @@ class Game:
         for event in pygame.event.get():
             if event.type == pygame.QUIT or keys[pygame.K_ESCAPE]:
                 self.running = False
-
-        self.rocket_group.update(keys)
+            # обробка паузи точніше перевірка на натискання клавіші
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_p:
+                    self.paused = not self.paused
+        # обновляємо ракети якщо не натиснута пауза
+        if not self.paused:
+            self.rocket_group.update(keys)
 
     # це функція обновляє всі зміни в кадрі
     def update(self):
+
+        if self.paused:
+            return
+
         self.asteroids.update()
         self.bonuses.update()
+        self.explosions.update()
 
         # Колізії з астероїдами
         # зберігається список з штовхнувшимися об'єктами
@@ -130,6 +143,11 @@ class Game:
                                       f"Lives: {self.lives} "
                                       f"Level: {self.level}", True, WHITE)
         self.screen.blit(score_text, (10, 10))
+
+        # вивід тексту паузи по центру екрану
+        if self.paused:
+            pause_text = self.font.render("Paused", True, WHITE)
+            self.screen.blit(pause_text, (SCREEN_WIDTH // 2 - 100, SCREEN_HEIGHT // 2))
 
         pygame.display.flip()
 
