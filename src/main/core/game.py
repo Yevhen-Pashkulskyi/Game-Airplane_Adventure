@@ -25,6 +25,7 @@ class Game:
         self.screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 
         self.paused = False
+        self.game_over = False
 
         # назва вікна
         pygame.display.set_caption("Airplane Adventure")
@@ -36,7 +37,7 @@ class Game:
         # змінна для циклу гри
         self.running = True
         try:
-        # Завантаження зображень
+            # Завантаження зображень
             self.rocket_img = pygame.image.load(os.path.join(IMG_DIR, "rocket_40x64.png"))
             self.asteroid_img = pygame.image.load(os.path.join(IMG_DIR, "asteroid_48x50.png"))
             self.bonus_img = pygame.image.load(os.path.join(IMG_DIR, "bonus_49x50.png"))
@@ -45,17 +46,17 @@ class Game:
             # завантаження звуків
             self.coin_sound = pygame.mixer.Sound(os.path.join(snd_dir, "coin-257878.wav"))
             self.boom_sound = pygame.mixer.Sound(os.path.join(snd_dir, "cinematic-boom-171285.wav"))
+            self.background_sound = pygame.mixer.Sound(os.path.join(snd_dir, "undrtael-332308.mp3"))
         except pygame.error as e:
             print(e)
             pygame.quit()
             exit()
 
-        self.boom_sound.set_volume(0.5)
-        self.coin_sound.set_volume(0.2)
-        # pygame.mixer.music.load(os.path.join(snd_dir, "background-music-109766.mp3"))
-        # pygame.mixer.music.set_volume(0.2)
-        # pygame.mixer.music.play(loops=-1, start=0.0)
-        # pygame.mixer.music.set_volume(0.2)
+        self.boom_sound.set_volume(0.7)
+        self.coin_sound.set_volume(0.3)
+
+        self.background_sound.set_volume(0.2)
+        self.background_sound.play(loops=-1)
 
         # Створення спрайтів
         self.rocket = Rocket(self.rocket_img, (100, SCREEN_HEIGHT // 2))
@@ -116,6 +117,7 @@ class Game:
                 asteroid.rect.y = random.randrange(0, SCREEN_HEIGHT - ASTEROID_SIZE)
             if self.lives <= 0:
                 self.running = False
+                self.game_over = True
 
         # зіткнення ракети та бонусів
         hits = pygame.sprite.spritecollide(self.rocket, self.bonuses, dokill=True)
@@ -148,6 +150,18 @@ class Game:
         if self.paused:
             pause_text = self.font.render("Paused", True, WHITE)
             self.screen.blit(pause_text, (SCREEN_WIDTH // 2 - 100, SCREEN_HEIGHT // 2))
+            self.background_sound.set_volume(0.0)
+        else:
+            self.background_sound.set_volume(0.2)
+
+        if self.game_over:
+            game_over_text = self.font.render("GAME OVER", True, WHITE)
+            final_score_text = self.font.render(f"Final score: {self.score}", True, WHITE)
+
+            self.screen.blit(final_score_text, (SCREEN_WIDTH // 2 - 150, SCREEN_HEIGHT // 3))
+            self.screen.blit(game_over_text, (SCREEN_WIDTH // 2 - 150, SCREEN_HEIGHT // 2))
+
+            self.background_sound.set_volume(0.0)
 
         pygame.display.flip()
 
@@ -158,5 +172,8 @@ class Game:
             self.update()
             self.explosions.update()
             self.draw()
+
+        if self.game_over:
+            pygame.time.wait(5000)
 
         pygame.quit()
