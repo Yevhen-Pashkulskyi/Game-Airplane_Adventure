@@ -15,9 +15,9 @@ class Rocket(pygame.sprite.Sprite):
         self.direction = "up"
 
         snd_path = os.path.join(os.path.dirname(__file__),
-                                "..", "assets", "snd", "motorcycle-engine-rev-337867.wav")
+                                "..", "assets", "snd", "big-motor-90117.wav")
         self.motorcycle_sound = pygame.mixer.Sound(snd_path)
-        self.motorcycle_sound.set_volume(0.2)
+        self.motorcycle_sound.set_volume(0.05)
         self.moving = False
 
     def update(self, keys):

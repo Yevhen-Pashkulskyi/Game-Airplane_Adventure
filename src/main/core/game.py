@@ -47,7 +47,7 @@ class Game:
             pygame.quit()
             exit()
 
-        self.boom_sound.set_volume(0.2)
+        self.boom_sound.set_volume(0.5)
         self.coin_sound.set_volume(0.2)
         # pygame.mixer.music.load(os.path.join(snd_dir, "background-music-109766.mp3"))
         # pygame.mixer.music.set_volume(0.2)
@@ -112,10 +112,11 @@ class Game:
             self.bonuses.add(Bonus(self.bonus_img, speed=5 + self.score // 10))
 
         # Підвищення рівня та нові астероїди
-        if self.score >= self.last_score + 10 and len(self.asteroids) < 5:
+        if self.score >= self.last_score + 10:
             self.level += 1
-            self.asteroids.add(Asteroid(self.asteroid_img, speed=5 + self.score // 10))
             self.rocket.speed += 1
+            if len(self.asteroids) < 5:
+                self.asteroids.add(Asteroid(self.asteroid_img, speed=5 + self.score // 10))
             self.last_score = self.score
 
     def draw(self):
