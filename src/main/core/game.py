@@ -10,9 +10,9 @@ from src.main.core.const import *
 
 # первірка шляху до файлів
 try:
-    game_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
-    IMG_DIR = os.path.join(game_dir, "assets", "img")
-    snd_dir = os.path.join(game_dir, "assets", "snd")
+    GAME_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+    IMG_DIR = os.path.join(GAME_DIR, "assets", "img")
+    SND_DIR = os.path.join(GAME_DIR, "assets", "snd")
 
 except pygame.error as e:
     print(e)
@@ -44,9 +44,9 @@ class Game:
             self.background_img = pygame.image.load(os.path.join(IMG_DIR, "background_1100x691.png"))
 
             # завантаження звуків
-            self.coin_sound = pygame.mixer.Sound(os.path.join(snd_dir, "coin-257878.wav"))
-            self.boom_sound = pygame.mixer.Sound(os.path.join(snd_dir, "cinematic-boom-171285.wav"))
-            self.background_sound = pygame.mixer.Sound(os.path.join(snd_dir, "undrtael-332308.mp3"))
+            self.coin_sound = pygame.mixer.Sound(os.path.join(SND_DIR, "coin-257878.wav"))
+            self.boom_sound = pygame.mixer.Sound(os.path.join(SND_DIR, "cinematic-boom-171285.wav"))
+            self.background_sound = pygame.mixer.Sound(os.path.join(SND_DIR, "undrtael-332308.mp3"))
         except pygame.error as e:
             print(e)
             pygame.quit()

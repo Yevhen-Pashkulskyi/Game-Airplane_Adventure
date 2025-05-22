@@ -1,7 +1,5 @@
 import random
-
 import pygame
-
 from src.main.core.const import *
 
 class Bonus(pygame.sprite.Sprite):

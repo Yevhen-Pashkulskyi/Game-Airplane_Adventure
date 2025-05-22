@@ -1,6 +1,5 @@
 import random
 import pygame
-
 from src.main.core.const import *
 
 class Asteroid(pygame.sprite.Sprite):

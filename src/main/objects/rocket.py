@@ -17,13 +17,7 @@ class Rocket(pygame.sprite.Sprite):
         self.motorcycle_sound.set_volume(0.05)
         self.moving = False
 
-    def reset_position(self):
-        self.rect.center = (100, SCREEN_HEIGHT // 2)
-        self.direction = "up"
-        self.image = self.original_img
-
     def update(self, keys):
-        diagonal_speed = self.speed // 4
         moving_now = False
         dx = dy = 0
 
