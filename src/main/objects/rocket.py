@@ -1,8 +1,5 @@
 import os.path
-from math import sqrt
-
 import pygame
-
 from src.main.core.const import SCREEN_WIDTH, SCREEN_HEIGHT
 
 class Rocket(pygame.sprite.Sprite):
@@ -20,50 +17,48 @@ class Rocket(pygame.sprite.Sprite):
         self.motorcycle_sound.set_volume(0.05)
         self.moving = False
 
+    def reset_position(self):
+        self.rect.center = (100, SCREEN_HEIGHT // 2)
+        self.direction = "up"
+        self.image = self.original_img
+
     def update(self, keys):
         diagonal_speed = self.speed // 4
         moving_now = False
+        dx = dy = 0
 
         if keys[pygame.K_LEFT] or keys[pygame.K_a]:
             self.direction = "left"
-            self.rect.x -= self.speed
+            dx -= self.speed
             moving_now = True
         if keys[pygame.K_RIGHT] or keys[pygame.K_d]:
             self.direction = "right"
-            self.rect.x += self.speed
+            dx += self.speed
             moving_now = True
         if keys[pygame.K_UP] or keys[pygame.K_w]:
             self.direction = "up"
-            self.rect.y -= self.speed
+            dy -= self.speed
             moving_now = True
         if keys[pygame.K_DOWN] or keys[pygame.K_s]:
             self.direction = "down"
-            self.rect.y += self.speed
+            dy += self.speed
             moving_now = True
+
         if ((keys[pygame.K_UP] or keys[pygame.K_w])
                 and (keys[pygame.K_LEFT] or keys[pygame.K_a])):
             self.direction = "up-left"
-            self.rect.y -= diagonal_speed
-            self.rect.x -= diagonal_speed
-            moving_now = True
         if ((keys[pygame.K_DOWN] or keys[pygame.K_s])
                 and (keys[pygame.K_RIGHT] or keys[pygame.K_d])):
             self.direction = "down-right"
-            self.rect.y += diagonal_speed
-            self.rect.x += diagonal_speed
-            moving_now = True
         if ((keys[pygame.K_DOWN] or keys[pygame.K_s])
                 and (keys[pygame.K_LEFT] or keys[pygame.K_a])):
             self.direction = "down-left"
-            self.rect.y += diagonal_speed
-            self.rect.x -= diagonal_speed
-            moving_now = True
         if ((keys[pygame.K_UP] or keys[pygame.K_w])
                 and (keys[pygame.K_RIGHT] or keys[pygame.K_d])):
             self.direction = "up-right"
-            self.rect.x += diagonal_speed
-            self.rect.y -= diagonal_speed
-            moving_now = True
+
+        self.rect.x += dx
+        self.rect.y += dy
 
         if moving_now and not self.moving:
             self.motorcycle_sound.play(-1)

@@ -73,7 +73,7 @@ class Game:
 
         self.score = 0
         self.last_score = self.score
-        self.lives = 10
+        self.lives = 2
         self.level = 1
         # об'єкт шрифта для відображення всього тексту в грі
         self.font = pygame.font.SysFont(None, 40)
@@ -150,9 +150,10 @@ class Game:
         if self.paused:
             pause_text = self.font.render("Paused", True, WHITE)
             self.screen.blit(pause_text, (SCREEN_WIDTH // 2 - 100, SCREEN_HEIGHT // 2))
-            self.background_sound.set_volume(0.0)
-        else:
-            self.background_sound.set_volume(0.2)
+            self.background_sound.stop()
+        if not self.paused:
+            if not pygame.mixer.get_busy():
+                self.background_sound.play(loops=-1)
 
         if self.game_over:
             game_over_text = self.font.render("GAME OVER", True, WHITE)
@@ -161,7 +162,9 @@ class Game:
             self.screen.blit(final_score_text, (SCREEN_WIDTH // 2 - 150, SCREEN_HEIGHT // 3))
             self.screen.blit(game_over_text, (SCREEN_WIDTH // 2 - 150, SCREEN_HEIGHT // 2))
 
-            self.background_sound.set_volume(0.0)
+            self.rocket.motorcycle_sound.stop()
+            self.coin_sound.stop()
+            self.background_sound.stop()
 
         pygame.display.flip()
 
